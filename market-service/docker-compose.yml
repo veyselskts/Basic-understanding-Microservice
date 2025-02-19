@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  mysql-market:
+    image: mysql:8.0
+    container_name: market-mysql
+    environment:
+      MYSQL_DATABASE: market_db
+      MYSQL_ROOT_PASSWORD: ****
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_market_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  mysql-customer:
+    image: mysql:8.0
+    container_name: customer-mysql
+    environment:
+      MYSQL_DATABASE: customer_db
+      MYSQL_ROOT_PASSWORD: ****
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_customer_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_market_data:
+  mysql_customer_data:
